@@ -115,6 +115,9 @@ mod extern_paths;
 mod ident;
 mod message_graph;
 
+#[cfg(feature = "raw-fdset")]
+mod file_descriptor_set;
+
 use std::collections::HashMap;
 use std::default;
 use std::env;
@@ -715,6 +718,10 @@ impl Config {
         }
 
         let buf = fs::read(file_descriptor_set_path)?;
+
+        #[cfg(feature = "raw-fdset")]
+        file_descriptor_set::compile(&target, &buf)?;
+
         let file_descriptor_set = FileDescriptorSet::decode(&*buf).map_err(|error| {
             Error::new(
                 ErrorKind::InvalidInput,
