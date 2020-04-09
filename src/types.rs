@@ -18,6 +18,8 @@ use crate::{
     DecodeError, Message,
 };
 
+use crate::MessageNamed;
+
 /// `google.protobuf.BoolValue`
 impl Message for bool {
     fn encode_raw<B>(&self, buf: &mut B)
@@ -53,6 +55,12 @@ impl Message for bool {
     }
     fn clear(&mut self) {
         *self = false;
+    }
+}
+
+impl MessageNamed for bool {
+    fn fqname() -> &'static str {
+        "google.protobuf.BoolValue"
     }
 }
 
@@ -94,6 +102,12 @@ impl Message for u32 {
     }
 }
 
+impl MessageNamed for u32 {
+    fn fqname() -> &'static str {
+        "google.protobuf.UInt32Value"
+    }
+}
+
 /// `google.protobuf.UInt64Value`
 impl Message for u64 {
     fn encode_raw<B>(&self, buf: &mut B)
@@ -129,6 +143,12 @@ impl Message for u64 {
     }
     fn clear(&mut self) {
         *self = 0;
+    }
+}
+
+impl MessageNamed for u64 {
+    fn fqname() -> &'static str {
+        "google.protobuf.UInt64Value"
     }
 }
 
@@ -170,6 +190,12 @@ impl Message for i32 {
     }
 }
 
+impl MessageNamed for i32 {
+    fn fqname() -> &'static str {
+        "google.protobuf.Int32Value"
+    }
+}
+
 /// `google.protobuf.Int64Value`
 impl Message for i64 {
     fn encode_raw<B>(&self, buf: &mut B)
@@ -205,6 +231,12 @@ impl Message for i64 {
     }
     fn clear(&mut self) {
         *self = 0;
+    }
+}
+
+impl MessageNamed for i64 {
+    fn fqname() -> &'static str {
+        "google.protobuf.Int64Value"
     }
 }
 
@@ -246,6 +278,12 @@ impl Message for f32 {
     }
 }
 
+impl MessageNamed for f32 {
+    fn fqname() -> &'static str {
+        "google.protobuf.FloatValue"
+    }
+}
+
 /// `google.protobuf.DoubleValue`
 impl Message for f64 {
     fn encode_raw<B>(&self, buf: &mut B)
@@ -284,6 +322,12 @@ impl Message for f64 {
     }
 }
 
+impl MessageNamed for f64 {
+    fn fqname() -> &'static str {
+        "google.protobuf.DoubleValue"
+    }
+}
+
 /// `google.protobuf.StringValue`
 impl Message for String {
     fn encode_raw<B>(&self, buf: &mut B)
@@ -319,6 +363,12 @@ impl Message for String {
     }
     fn clear(&mut self) {
         self.clear();
+    }
+}
+
+impl MessageNamed for String {
+    fn fqname() -> &'static str {
+        "google.protobuf.StringValue"
     }
 }
 
@@ -398,6 +448,13 @@ impl Message for Bytes {
     }
 }
 
+impl MessageNamed for Bytes {
+    fn fqname() -> &'static str {
+        "google.protobuf.BytesValue"
+    }
+}
+
+
 /// `google.protobuf.Empty`
 impl Message for () {
     fn encode_raw<B>(&self, _buf: &mut B)
@@ -421,4 +478,10 @@ impl Message for () {
         0
     }
     fn clear(&mut self) {}
+}
+
+impl MessageNamed for () {
+    fn fqname() -> &'static str {
+        "google.protobuf.BytesValue"
+    }
 }
