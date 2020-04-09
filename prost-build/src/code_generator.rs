@@ -185,6 +185,8 @@ impl<'a> CodeGenerator<'a> {
                 }
             });
 
+        assert_eq!(oneof_fields.len(), message.oneof_decl.len());
+
         self.append_doc(&fq_message_name, None);
 
         self.push_indent();
@@ -193,6 +195,7 @@ impl<'a> CodeGenerator<'a> {
             &fq_message_name
         ));
         self.append_type_attributes(&fq_message_name);
+
         self.push_indent();
         self.buf
             .push_str("#[derive(Clone, PartialEq, ::prost::Message)]\n");
