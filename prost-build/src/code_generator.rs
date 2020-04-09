@@ -188,6 +188,11 @@ impl<'a> CodeGenerator<'a> {
         self.append_doc(&fq_message_name, None);
         self.append_type_attributes(&fq_message_name);
         self.push_indent();
+        self.buf.push_str(&format!(
+            "#[::prost::meta(fqname=\"{}\")]\n",
+            &fq_message_name
+        ));
+        self.push_indent();
         self.buf
             .push_str("#[derive(Clone, PartialEq, ::prost::Message)]\n");
         self.push_indent();
@@ -603,6 +608,9 @@ impl<'a> CodeGenerator<'a> {
 
         self.append_doc(&fq_enum_name, None);
         self.append_type_attributes(&fq_enum_name);
+        self.push_indent();
+        self.buf
+            .push_str(&format!("#[::prost::meta(fqname=\"{}\")]\n", &fq_enum_name));
         self.push_indent();
         self.buf.push_str(
             "#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]\n",
