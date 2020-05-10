@@ -699,7 +699,6 @@ pub fn protoc_include() -> &'static Path {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use env_logger;
     use std::cell::RefCell;
     use std::rc::Rc;
 
