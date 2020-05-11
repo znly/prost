@@ -178,10 +178,10 @@ impl<'a> CodeGenerator<'a> {
             &fq_message_name
         ));
 
+        self.append_type_attributes(&fq_message_name);
         self.push_indent();
         self.buf
             .push_str("#[derive(Clone, PartialEq, ::prost::Message)]\n");
-        self.append_type_attributes(&fq_message_name);
         self.push_indent();
         self.buf.push_str("pub struct ");
         self.buf.push_str(&to_upper_camel(&message_name));
@@ -490,11 +490,11 @@ impl<'a> CodeGenerator<'a> {
         self.path.pop();
         self.path.pop();
 
+        let oneof_name = format!("{}.{}", msg_name, oneof.name());
+        self.append_type_attributes(&oneof_name);
         self.push_indent();
         self.buf
             .push_str("#[derive(Clone, PartialEq, ::prost::Oneof)]\n");
-        let oneof_name = format!("{}.{}", msg_name, oneof.name());
-        self.append_type_attributes(&oneof_name);
         self.push_indent();
         self.buf.push_str("pub enum ");
         self.buf.push_str(&to_upper_camel(oneof.name()));
@@ -575,6 +575,7 @@ impl<'a> CodeGenerator<'a> {
         }
 
         self.append_doc();
+        self.append_type_attributes(&fq_enum_name);
         self.push_indent();
         self.buf
             .push_str(&format!("#[::prost::meta(fqname=\"{}\")]\n", &fq_enum_name));
@@ -584,7 +585,6 @@ impl<'a> CodeGenerator<'a> {
         );
         self.push_indent();
         self.buf.push_str("#[repr(i32)]\n");
-        self.append_type_attributes(&fq_enum_name);
         self.push_indent();
         self.buf.push_str("pub enum ");
         self.buf.push_str(&to_upper_camel(desc.name()));
@@ -699,6 +699,11 @@ impl<'a> CodeGenerator<'a> {
     }
 
     fn push_mod(&mut self, module: &str) {
+        self.push_indent();
+        self.buf.push_str("/// Nested message and enum types in `");
+        self.buf.push_str(module);
+        self.buf.push_str("`.\n");
+
         self.push_indent();
         self.buf.push_str("pub mod ");
         self.buf.push_str(&to_snake(module));
