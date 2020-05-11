@@ -553,12 +553,13 @@ impl Config {
             ));
         }
 
-        let buf = fs::read(&descriptor_set)?;
-
-        #[cfg(feature = "raw-fdset")]
-        file_descriptor_set::compile(&target, &buf)?;
-
-        let descriptor_set = FileDescriptorSet::decode(&*buf)?;
+        let buf = fs::read(descriptor_set)?;
+        let descriptor_set = FileDescriptorSet::decode(&*buf).map_err(|error| {
+            Error::new(
+                ErrorKind::InvalidInput,
+                format!("invalid FileDescriptorSet: {}", error.to_string()),
+            )
+        })?;
 
         let modules = self.generate(descriptor_set.file)?;
         for (module, content) in modules {
