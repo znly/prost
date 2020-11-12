@@ -176,14 +176,14 @@ impl<'a> CodeGenerator<'a> {
             .into_iter()
             .enumerate()
             .partition_map(|(idx, field)| {
-                if let Some(oneof_index) = field.oneof_index {
+                if field.proto3_optional.unwrap_or(false) {
+                    Either::Left((field, idx))
+                } else if let Some(oneof_index) = field.oneof_index {
                     Either::Right((oneof_index, (field, idx)))
                 } else {
                     Either::Left((field, idx))
                 }
             });
-
-        assert_eq!(oneof_fields.len(), message.oneof_decl.len());
 
         self.append_doc();
 
@@ -223,13 +223,14 @@ impl<'a> CodeGenerator<'a> {
         self.path.push(8);
         for (idx, oneof) in message.oneof_decl.iter().enumerate() {
             let idx = idx as i32;
+
+            let fields = match oneof_fields.get_vec(&idx) {
+                Some(fields) => fields,
+                None => continue,
+            };
+
             self.path.push(idx);
-            self.append_oneof_field(
-                &message_name,
-                &fq_message_name,
-                oneof,
-                oneof_fields.get_vec(&idx).unwrap(),
-            );
+            self.append_oneof_field(&message_name, &fq_message_name, oneof, fields);
             self.path.pop();
         }
         self.path.pop();
@@ -829,6 +830,10 @@ impl<'a> CodeGenerator<'a> {
     }
 
     fn optional(&self, field: &FieldDescriptorProto) -> bool {
+        if field.proto3_optional.unwrap_or(false) {
+            return true;
+        }
+
         if field.label() != Label::Optional {
             return false;
         }
