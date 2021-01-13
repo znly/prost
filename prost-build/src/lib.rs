@@ -115,28 +115,25 @@ mod extern_paths;
 mod ident;
 mod message_graph;
 
-#[cfg(feature = "raw-fdset")]
-mod file_descriptor_set;
-
-use std::collections::HashMap;
-use std::default;
-use std::env;
-use std::ffi::{OsStr, OsString};
-use std::fmt;
-use std::fs;
-use std::io::{Error, ErrorKind, Result};
-use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::{
+    collections::HashMap,
+    default, env,
+    ffi::{OsStr, OsString},
+    fmt, fs,
+    io::{Error, ErrorKind, Result},
+    path::{Path, PathBuf},
+    process::Command,
+};
 
 use log::trace;
 use prost::Message;
 use prost_types::{FileDescriptorProto, FileDescriptorSet};
 
 pub use crate::ast::{Comments, Method, Service};
-use crate::code_generator::CodeGenerator;
-use crate::extern_paths::ExternPaths;
-use crate::ident::to_snake;
-use crate::message_graph::MessageGraph;
+use crate::{
+    code_generator::CodeGenerator, extern_paths::ExternPaths, ident::to_snake,
+    message_graph::MessageGraph,
+};
 
 type Module = Vec<String>;
 
@@ -889,8 +886,7 @@ pub fn protoc_include() -> PathBuf {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::cell::RefCell;
-    use std::rc::Rc;
+    use std::{cell::RefCell, rc::Rc};
 
     /// An example service generator that generates a trait with methods corresponding to the
     /// service methods.
@@ -913,6 +909,7 @@ mod tests {
             // Close out the trait.
             buf.push_str("}\n");
         }
+
         fn finalize(&mut self, buf: &mut String) {
             // Needs to be present only once, no matter how many services there are
             buf.push_str("pub mod utils { }\n");
