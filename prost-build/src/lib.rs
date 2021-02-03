@@ -116,9 +116,6 @@ mod ident;
 mod message_graph;
 mod path;
 
-#[cfg(feature = "raw-fdset")]
-mod file_descriptor_set;
-
 use std::collections::HashMap;
 use std::default;
 use std::env;
